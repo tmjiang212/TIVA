@@ -50,7 +50,7 @@ int main(void)
 
     //Set I2C Master Clock
     I2CMasterInitExpClk(I2C4_BASE, g_ui32SysClock, false);
-
+    //Config slave
     I2CSlaveEnable(I2C6_BASE);
     I2CSlaveInit(I2C6_BASE, SLAVE_ADDRESS);
     I2CMasterSlaveAddrSet(I2C4_BASE, SLAVE_ADDRESS, false);
