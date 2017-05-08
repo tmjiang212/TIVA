@@ -27,18 +27,15 @@ int main(void)
 {
     //Set Clock
     g_ui32SysClock = SysCtlClockFreqSet((SYSCTL_OSC_MAIN | SYSCTL_XTAL_25MHZ | SYSCTL_USE_PLL | SYSCTL_CFG_VCO_320), 40000000); 
-
     // Enable the GPIO 
     SYSCTL_RCGCGPIO_R = SYSCTL_RCGCGPIO_R3 | SYSCTL_RCGCGPIO_R9 | SYSCTL_RCGCGPIO_R1;
-
     // Do a dummy read to insert a few cycles after enabling the peripheral.
     result = SYSCTL_RCGCGPIO_R;
-
     // Enable the GPIO pin for the LED (PD3).  Set the direction as output, and enable the GPIO pin for digital function.
     GPIO_PORTD_AHB_DIR_R = 0x8;
     GPIO_PORTD_AHB_DEN_R = 0x8;
-
-    SYSCTL_RCGCI2C_R = (1 << 4) | (1 << 6); // Mode Clock Gating Control for I2C modules 4 and 6
+    // Mode Clock Gating Control for I2C modules 4 and 6
+    SYSCTL_RCGCI2C_R = (1 << 4) | (1 << 6); 
 
     GPIOPinConfigure(GPIO_PK6_I2C4SCL);
     GPIOPinConfigure(GPIO_PK7_I2C4SDA);
@@ -49,7 +46,6 @@ int main(void)
     GPIOPinTypeI2CSCL(GPIO_PORTK_BASE, (1 << 6));    // Configures SCL
     GPIOPinTypeI2C(GPIO_PORTB_BASE, (1 << 7));       // Configures SDA
     GPIOPinTypeI2CSCL(GPIO_PORTB_BASE, (1 << 6));    // Configures SCL
-
     //Set I2C Master Clock
     I2CMasterInitExpClk(I2C4_BASE, g_ui32SysClock, false);
     //Config slave
