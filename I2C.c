@@ -1,3 +1,5 @@
+//Tiva (Texas Instruments Cortex M4F ARM) TM4C129XNCZAD I2C configuration. Send/Receive Data
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_i2c.h"
