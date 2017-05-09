@@ -1,3 +1,13 @@
+#define MEM_BUFFER_SIZE 1024
+static uint32_t g_ui32SrcBuf[MEM_BUFFER_SIZE];
+static uint32_t g_ui32DstBuf[MEM_BUFFER_SIZE];
+static uint32_t g_ui32DMAErrCount = 0;
+static uint32_t g_ui32BadISR = 0;
+static uint32_t g_ui32MemXferCount = 0;
+#pragma DATA_ALIGN(pui8ControlTable, 1024)
+uint8_t pui8ControlTable[1024];
+
+
 void UART1IntHandler(void)
 {
       uint32_t ui32Status;
@@ -59,3 +69,30 @@ void InitUART1Transfer(void)
         ROM_uDMAChannelEnable(UDMA_CHANNEL_UART1TX);
 }
 
+int main(void)
+{
+      volatile uint32_t ui32Loop;
+      ROM_FPULazyStackingEnable();
+      ROM_SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
+      ROM_SysCtlPeripheralClockGating(true);
+      ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+      ROM_GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
+      ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+      ROM_SysCtlPeripheralSleepEnable(SYSCTL_PERIPH_UART0);
+      GPIOPinConfigure(GPIO_PA0_U0RX);
+      GPIOPinConfigure(GPIO_PA1_U0TX);
+      ROM_GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+      ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_UDMA);
+      ROM_SysCtlPeripheralSleepEnable(SYSCTL_PERIPH_UDMA);
+      ROM_IntEnable(INT_UDMAERR);
+      ROM_uDMAEnable();
+      ROM_uDMAControlBaseSet(ucControlTable);
+      InitUART1Transfer();
+      while(1)
+      {
+            GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
+            SysCtlDelay(SysCtlClockGet() / 20 / 3);
+            GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
+            SysCtlDelay(SysCtlClockGet() / 20 / 3);
+      }
+}
