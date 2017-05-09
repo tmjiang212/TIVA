@@ -1,3 +1,25 @@
+#include "stdint.h"
+#include "stdbool.h"
+#include "time.h"
+#include "inc/hw_memmap.h"
+#include "inc/hw_nvic.h"
+#include "inc/hw_sysctl.h"
+#include "inc/hw_types.h"
+#include "driverlib/fpu.h"
+#include "driverlib/gpio.h"
+#include "driverlib/flash.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/systick.h"
+#include "driverlib/uart.h"
+#include "driverlib/udma.h"
+#include "driverlib/rom.h"
+#include "grlib/grlib.h"
+#include "utils/ustdlib.h"
+#include "Kentec320x240x16_ssd2119_8bit.h"
+#include "touch.h"
+#include "images.h"
+#include "driverlib/adc.h"
+
 #define MEM_BUFFER_SIZE 1024
 static uint32_t g_ui32SrcBuf[MEM_BUFFER_SIZE];
 static uint32_t g_ui32DstBuf[MEM_BUFFER_SIZE];
